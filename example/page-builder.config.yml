@@ -1,0 +1,16 @@
+input: ./pages
+output: ./dist
+theme: light
+baseUrl: ''
+minify: true
+sourceMaps: false
+css:
+  - ./styles/main.css
+components: ./components
+assets: ./assets
+navigation: ./navigation.yml
+webpack:
+  # Custom webpack configuration can be added here
+  # mode: 'production'
+  # optimization:
+  #   minimize: true

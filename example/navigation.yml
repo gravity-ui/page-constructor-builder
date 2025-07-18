@@ -1,0 +1,19 @@
+logo:
+  text: Page Constructor Builder
+  url: 'index.html'
+  icon: 'assets/logo.svg'
+header:
+  leftItems:
+    - text: Home
+      url: 'index.html'
+      type: 'link'
+    - text: About
+      url: 'about.html'
+      type: 'link'
+    - text: Documentation
+      url: 'https://github.com/gravity-ui/page-constructor'
+      type: 'link'
+  rightItems:
+    - text: GitHub
+      url: 'https://github.com/pistch/page-constructor-builder'
+      type: 'link'
