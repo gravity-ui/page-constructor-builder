@@ -1,0 +1,69 @@
+meta:
+  title: 'About Page Constructor Builder | Learn More'
+  description: 'Discover the features and capabilities of Page Constructor Builder, a TypeScript CLI tool for creating static websites from YAML configurations'
+  sharing:
+    title: 'About Page Constructor Builder - Features & Capabilities'
+    description: 'Learn about the powerful features of Page Constructor Builder: YAML-based configuration, React hydration, custom components, and more'
+    image: 'assets/about-banner.svg'
+    keywords:
+      - about
+      - features
+      - capabilities
+      - documentation
+  keywords:
+    - about
+    - features
+    - documentation
+
+blocks:
+  - type: header-block
+    title: About This Project
+    description: Learn more about the **Page Constructor Builder** and how it works
+    background:
+      color: '#e3f2fd'
+
+  - type: content-layout-block
+    textContent:
+      title: What is Page Constructor Builder?
+      text: |
+        Page Constructor Builder is a command-line utility that leverages the power of 
+        [@gravity-ui/page-constructor](https://github.com/gravity-ui/page-constructor) 
+        to build static websites from simple YAML configurations.
+
+        ## How it Works
+
+        1. **YAML Configuration**: Write your page content in simple YAML files
+        2. **Component Processing**: The tool processes built-in and custom components
+        3. **Bundle Creation**: Webpack bundles all assets and dependencies
+        4. **Static Generation**: HTML pages are generated with React hydration
+        5. **Ready to Deploy**: Output is a complete static website
+
+  - type: content-layout-block
+    textContent:
+      title: Built With
+      text: |
+        ## Technologies Used
+
+        - **[@gravity-ui/page-constructor](https://github.com/gravity-ui/page-constructor)**: The core page building library
+        - **React**: Component framework for dynamic content
+        - **TypeScript**: Type-safe development
+        - **Webpack**: Asset bundling and optimization
+        - **Commander.js**: CLI interface
+        - **YAML**: Human-readable configuration format
+
+  - type: content-layout-block
+    textContent:
+      title: Use Cases
+      text: |
+        ## Perfect For
+
+        - **Documentation Sites**: Create beautiful documentation with minimal effort
+        - **Landing Pages**: Build marketing pages with custom components
+        - **Portfolio Sites**: Showcase your work with rich content blocks
+        - **Blog Sites**: Create content-rich blogs with markdown support
+        - **Corporate Sites**: Build professional websites with consistent styling
+
+  - type: CustomBlock
+    title: 'Custom Component Example'
+    content: 'This is a custom component that demonstrates how you can extend the page constructor with your own React components. Custom components work seamlessly with the client-side bundle!'
+    variant: 'primary'

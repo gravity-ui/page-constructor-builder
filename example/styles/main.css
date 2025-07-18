@@ -1,0 +1,124 @@
+/* Custom styles for Page Constructor Builder example */
+
+/* Global styles */
+:root {
+  --primary-color: #007acc;
+  --secondary-color: #f8f9fa;
+  --text-color: #333;
+  --border-color: #e1e5e9;
+  --border-radius: 8px;
+  --spacing: 20px;
+}
+
+/* Custom block styles */
+.custom-block {
+  padding: var(--spacing);
+  margin: var(--spacing) 0;
+  border-radius: var(--border-radius);
+  background: var(--secondary-color);
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.custom-block h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.custom-block p {
+  margin-bottom: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Custom block variants */
+.custom-block--primary {
+  background: linear-gradient(135deg, #007acc 0%, #0056b3 100%);
+  color: white;
+  border-left: 4px solid #ffffff;
+}
+
+.custom-block--primary h2 {
+  color: white;
+}
+
+.custom-block--primary p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.custom-block--secondary {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  border-left: 4px solid #ffffff;
+}
+
+.custom-block--secondary h2 {
+  color: white;
+}
+
+.custom-block--secondary p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Code block styling */
+pre {
+  background: #f6f8fa;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+code {
+  background: #f6f8fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .custom-block {
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .custom-block h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] {
+  --secondary-color: #2d3748;
+  --text-color: #e2e8f0;
+  --border-color: #4a5568;
+}
+
+[data-theme="dark"] .custom-block {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] pre {
+  background: #1a202c;
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] code {
+  background: #1a202c;
+  color: var(--text-color);
+} 
