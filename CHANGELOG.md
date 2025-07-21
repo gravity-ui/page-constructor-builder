@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 (2025-07-21)
+
+
+### Features
+
+* make page-constuctor-builder ([693b591](https://github.com/gravity-ui/page-constructor-builder/commit/693b591e97bcfbf013f5e2d23fcb44d01cb13b4c))
+
+
+### Bug Fixes
+
+* readme json formatting ([e5ae4b6](https://github.com/gravity-ui/page-constructor-builder/commit/e5ae4b649062a0a45150f6c7aab032bee1bccba5))
+
 ## [1.0.2](https://github.com/gravity-ui/page-constructor-builder/compare/v1.0.1...v1.0.2) (2025-07-21)
 
 ### Bug Fixes
