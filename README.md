@@ -7,7 +7,7 @@ A powerful command-line utility for building static pages from YAML configuratio
 1. **Install package:**
 
 ```bash
-npm install @yandex-data-ui/page-constructor-builder
+npm install @gravity-ui/page-constructor-builder
 ```
 
 2. **Add build command to package.json:**
