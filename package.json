@@ -1,6 +1,6 @@
 {
   "name": "@gravity-ui/page-constructor-builder",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A command line utility for building static pages from YAML configurations using @gravity-ui/page-constructor",
   "main": "dist/index.js",
   "bin": {
