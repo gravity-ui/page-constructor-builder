@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2025-07-21)
+
+
+### Features
+
+* make page-constuctor-builder ([693b591](https://github.com/gravity-ui/page-constructor-builder/commit/693b591e97bcfbf013f5e2d23fcb44d01cb13b4c))
+
 ## [1.0.2](https://github.com/gravity-ui/page-constructor-builder/compare/v1.0.1...v1.0.2) (2025-07-21)
 
 ### Bug Fixes
