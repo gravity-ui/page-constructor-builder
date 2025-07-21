@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/gravity-ui/page-constructor-builder/compare/v1.0.0...v1.0.1) (2025-07-21)
+
+
+### Bug Fixes
+
+* change package name ([b2aff14](https://github.com/gravity-ui/page-constructor-builder/commit/b2aff14f8b0a2b01fe0c01509c3aef5286190e1e))
+
 ## 1.0.0 (2025-07-21)
 
 
