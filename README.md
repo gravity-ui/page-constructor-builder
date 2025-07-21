@@ -14,11 +14,9 @@ npm install @gravity-ui/page-constructor-builder
 
 ```json
 {
-    ...
-    "scripts": {
-        "build": "page-builder build'
-    }
-    ...
+  "scripts": {
+    "build": "page-builder build"
+  }
 }
 ```
 
