@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/gravity-ui/page-constructor-builder/compare/v1.0.1...v1.0.2) (2025-07-21)
+
+
+### Bug Fixes
+
+* remove ts code from entry ([8ec2a09](https://github.com/gravity-ui/page-constructor-builder/commit/8ec2a09f117107394505f079da4b204fc78c512e))
+
 ## [1.0.1](https://github.com/gravity-ui/page-constructor-builder/compare/v1.0.0...v1.0.1) (2025-07-21)
 
 
