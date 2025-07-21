@@ -17,6 +17,7 @@
     "clean": "rimraf dist",
     "build:example": "npm run build && rm -rf example/dist && cd example && node ../dist/cli.js build && open dist/index.html",
     "build:example:watch": "npm run build && rm -rf example/dist && cd example && node ../dist/cli.js build --watch",
+    "prepack": "npm run build",
     "prepare": "husky"
   },
   "keywords": [
