@@ -110,12 +110,6 @@ ${componentManifest.map((comp) => `  '${comp.name}': ${comp.name}`).join(',\n')}
 };
 
 // Make hydratePageConstructor available globally with custom components
-declare global {
-    interface Window {
-        hydratePageConstructor: (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any}) => void;
-    }
-}
-
 window.hydratePageConstructor = (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any}) => {
     hydratePageConstructor({
         pageConfig: options.pageConfig,
