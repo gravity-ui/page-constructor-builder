@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/gravity-ui/page-constructor-builder/compare/v1.1.0...v1.2.0) (2025-08-21)
+
+
+### Features
+
+* add favicon support ([2cccdf1](https://github.com/gravity-ui/page-constructor-builder/commit/2cccdf104ba0ae27c45373a5d7c5b727b714b89b))
+
 ## 1.1.0 (2025-07-21)
 
 
