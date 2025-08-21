@@ -39,6 +39,9 @@ export class PageBuilder {
                 await this.copyStaticAssets();
             }
 
+            // Copy favicon if specified
+            await this.copyFavicon();
+
             // Find all YAML files
             const yamlFiles = await this.findYamlFiles();
 
@@ -274,6 +277,53 @@ export class PageBuilder {
         });
 
         console.log(`Copied assets from ${assetsDir} to ${outputAssetsDir}`);
+    }
+
+    /**
+     * Copy favicon file to output directory if configured
+     * @returns Promise that resolves when favicon is copied
+     */
+    private async copyFavicon(): Promise<void> {
+        if (!this.config.favicon) {
+            return;
+        }
+
+        const faviconPath = this.config.favicon;
+
+        // Skip copying if it's an external URL
+        if (faviconPath.startsWith('http://') || faviconPath.startsWith('https://')) {
+            return;
+        }
+
+        // Determine source path - check if it's relative to assets directory
+        let sourcePath: string;
+        if (path.isAbsolute(faviconPath)) {
+            sourcePath = faviconPath;
+        } else if (
+            this.config.assets &&
+            (await fs.pathExists(path.join(this.config.assets, faviconPath)))
+        ) {
+            // Favicon is in assets directory
+            sourcePath = path.join(this.config.assets, faviconPath);
+        } else if (await fs.pathExists(faviconPath)) {
+            // Favicon path is relative to project root
+            sourcePath = faviconPath;
+        } else {
+            console.warn(`Favicon file not found: ${faviconPath}`);
+            return;
+        }
+
+        // Determine output path
+        const faviconFilename = path.basename(sourcePath);
+        const outputPath = path.join(this.config.output, 'assets', faviconFilename);
+
+        // Ensure output directory exists
+        await fs.ensureDir(path.dirname(outputPath));
+
+        // Copy favicon file
+        await fs.copy(sourcePath, outputPath, {overwrite: true});
+
+        console.log(`Copied favicon from ${sourcePath} to ${outputPath}`);
     }
 
     /**

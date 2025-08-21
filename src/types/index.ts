@@ -25,6 +25,8 @@ export interface BuilderConfig {
     webpack?: Record<string, unknown>;
     /** Navigation file path */
     navigation?: string;
+    /** Favicon configuration */
+    favicon?: string;
 }
 
 export interface PageMetaSharing {

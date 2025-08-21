@@ -28,6 +28,7 @@ npm install @gravity-ui/page-constructor-builder
 input: ./pages
 output: ./dist
 assets: ./assets
+favicon: logo.svg
 theme: light
 minify: true
 ```
@@ -96,6 +97,7 @@ Create a `page-builder.config.yml` file in your project root:
 input: ./pages
 output: ./dist
 assets: ./assets
+favicon: logo.svg # Favicon file from assets or external URL
 theme: light
 baseUrl: https://mysite.com
 minify: true
@@ -230,6 +232,73 @@ blocks:
       - type: image
         src: assets/images/about-photo.png
         alt: Our team photo
+```
+
+### Favicon
+
+The page constructor builder supports adding favicons to your static pages. You can specify either a local file from your assets directory or an external URL.
+
+#### Configuration
+
+Add the `favicon` option to your configuration file:
+
+```yaml
+# page-builder.config.yml
+favicon: logo.svg # Local file from assets directory
+# or
+favicon: https://cdn.example.com/favicon.ico # External URL
+```
+
+#### Local Favicon Files
+
+For local favicon files, the builder will:
+
+- Automatically detect the file in your assets directory
+- Copy it to the output directory
+- Generate proper HTML `<link>` tags with correct MIME types
+
+**Supported file formats:**
+
+- **SVG** (recommended) - `image/svg+xml`
+- **ICO** (classic) - `image/x-icon`
+- **PNG** (modern) - `image/png`
+- **JPG/JPEG** (acceptable) - `image/jpeg`
+- **GIF** (animated) - `image/gif`
+
+**Examples:**
+
+```yaml
+# page-builder.config.yml
+favicon: logo.svg                    # File in assets/ directory
+favicon: icons/favicon.ico           # File in assets/icons/ subdirectory
+favicon: ./custom/path/favicon.png   # Custom path relative to project
+favicon: /absolute/path/favicon.ico  # Absolute path
+```
+
+#### External Favicon URLs
+
+You can also use external favicon URLs from CDNs or other domains:
+
+```yaml
+# page-builder.config.yml
+favicon: https://cdn.example.com/favicon.ico
+favicon: https://mysite.com/assets/logo.svg
+```
+
+#### Generated HTML
+
+The builder automatically generates appropriate HTML tags based on the favicon type:
+
+```html
+<!-- For SVG favicons -->
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+
+<!-- For ICO favicons (includes legacy browser support) -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="shortcut icon" href="assets/favicon.ico" />
+
+<!-- For external URLs -->
+<link rel="icon" href="https://example.com/favicon.ico" />
 ```
 
 ### Navigation

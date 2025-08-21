@@ -90,6 +90,7 @@ async function loadConfig(options: any): Promise<BuilderConfig> {
         watch: options.watch || config.watch || false,
         webpack: config.webpack,
         navigation: options.navigation || config.navigation,
+        favicon: options.favicon || config.favicon,
     };
 
     return finalConfig;
