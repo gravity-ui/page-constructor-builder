@@ -9,6 +9,13 @@ css:
 components: ./components
 assets: ./assets
 navigation: ./navigation.yml
+
+# Favicon configuration - choose one of the options below:
+favicon: logo.svg # Local file from assets/ directory (current)
+# favicon: icons/favicon.ico                   # Local file from assets/icons/ subdirectory
+# favicon: https://cdn.example.com/favicon.ico # External URL
+# favicon: ./custom/path/favicon.png           # Custom path relative to project root
+
 webpack:
   # Custom webpack configuration can be added here
   # mode: 'production'

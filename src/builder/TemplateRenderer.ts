@@ -74,6 +74,9 @@ export class TemplateRenderer {
         // Generate meta tags
         const metaTags = this.generateMetaTags(pageConfig);
 
+        // Generate favicon tags
+        const faviconTags = this.generateFaviconTags();
+
         // For local file usage, we need to avoid base href and use relative paths
         const baseHref = baseUrl !== '/' ? `<base href="${baseUrl}">` : '';
 
@@ -85,6 +88,9 @@ export class TemplateRenderer {
     <title>${title}</title>
     <meta name="description" content="${description}">
     ${baseHref}
+    
+    <!-- Favicon -->
+    ${faviconTags}
     
     <!-- Page Meta Tags -->
     ${metaTags}
@@ -282,6 +288,65 @@ export class TemplateRenderer {
         // Keywords
         if (meta.keywords && meta.keywords.length > 0) {
             tags.push(`<meta name="keywords" content="${meta.keywords.join(', ')}">`);
+        }
+
+        return tags.join('\n    ');
+    }
+
+    /**
+     * Generate favicon tags for the page
+     * @returns HTML string with favicon tags
+     */
+    private generateFaviconTags(): string {
+        if (!this.config.favicon) return '';
+
+        const faviconPath = this.config.favicon;
+        const tags: string[] = [];
+
+        // Determine if it's a URL or a file path
+        const isUrl = faviconPath.startsWith('http://') || faviconPath.startsWith('https://');
+
+        if (isUrl) {
+            // External URL favicon
+            tags.push(`<link rel="icon" href="${this.escapeHtml(faviconPath)}">`);
+        } else {
+            // Local file favicon - determine the MIME type based on file extension
+            const extension = faviconPath.toLowerCase().split('.').pop();
+            let mimeType = 'image/x-icon'; // default for .ico files
+
+            switch (extension) {
+                case 'png':
+                    mimeType = 'image/png';
+                    break;
+                case 'svg':
+                    mimeType = 'image/svg+xml';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    mimeType = 'image/jpeg';
+                    break;
+                case 'gif':
+                    mimeType = 'image/gif';
+                    break;
+                case 'ico':
+                default:
+                    mimeType = 'image/x-icon';
+                    break;
+            }
+
+            // For local assets, they will be copied to the assets directory
+            // Use just the filename if the path includes a directory
+            const faviconFilename = faviconPath.includes('/')
+                ? faviconPath.split('/').pop()
+                : faviconPath;
+            const faviconUrl = `assets/${faviconFilename}`;
+
+            tags.push(`<link rel="icon" type="${mimeType}" href="${this.escapeHtml(faviconUrl)}">`);
+
+            // Add shortcut icon for older browsers
+            if (extension === 'ico') {
+                tags.push(`<link rel="shortcut icon" href="${this.escapeHtml(faviconUrl)}">`);
+            }
         }
 
         return tags.join('\n    ');
