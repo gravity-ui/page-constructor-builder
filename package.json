@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.22.0",
     "@babel/preset-react": "^7.22.0",
     "@diplodoc/transform": "^4.0.0",
-    "@gravity-ui/page-constructor": "^7.5.0",
+    "@gravity-ui/page-constructor": "^7.15.1",
     "@gravity-ui/uikit": "^7.1.1",
     "babel-loader": "^9.1.0",
     "buffer": "^6.0.3",
