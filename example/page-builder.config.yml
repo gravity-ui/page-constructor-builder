@@ -9,6 +9,7 @@ css:
 components: ./components
 assets: ./assets
 navigation: ./navigation.yml
+analytics: ./analytics.js
 
 # Favicon configuration - choose one of the options below:
 favicon: logo.svg # Local file from assets/ directory (current)

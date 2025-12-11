@@ -2,7 +2,14 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import {glob} from 'glob';
 import * as YAML from 'yaml';
-import {BuildResult, BuilderConfig, ComponentManifest, NavigationData, PageConfig} from '../types';
+import {
+    AnalyticsContextProps,
+    BuildResult,
+    BuilderConfig,
+    ComponentManifest,
+    NavigationData,
+    PageConfig,
+} from '../types';
 import {WebpackBuilder} from './WebpackBuilder';
 import {TemplateRenderer} from './TemplateRenderer';
 
@@ -53,8 +60,11 @@ export class PageBuilder {
             // Load custom components if specified
             const componentManifest = await this.loadComponents();
 
+            // Load analytics configuration if specified
+            const analyticsConfig = await this.loadAnalyticsConfig();
+
             // Build webpack bundle with components and styles
-            await this.webpackBuilder.build(componentManifest);
+            await this.webpackBuilder.build(componentManifest, analyticsConfig);
 
             // Get generated CSS files
             const generatedCSSFiles = this.webpackBuilder.getGeneratedCSSFiles();
@@ -62,7 +72,12 @@ export class PageBuilder {
             // Process each YAML file
             for (const yamlFile of yamlFiles) {
                 try {
-                    await this.buildPage(yamlFile, componentManifest, generatedCSSFiles);
+                    await this.buildPage(
+                        yamlFile,
+                        componentManifest,
+                        generatedCSSFiles,
+                        analyticsConfig,
+                    );
                     result.pagesBuilt++;
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -128,6 +143,53 @@ export class PageBuilder {
     private async findYamlFiles(): Promise<string[]> {
         const pattern = path.join(this.config.input, '**/*.{yml,yaml}');
         return glob(pattern);
+    }
+
+    /**
+     * Load analytics configuration from specified file
+     * @returns Promise that resolves to analytics configuration or undefined
+     */
+    private async loadAnalyticsConfig(): Promise<AnalyticsContextProps | undefined> {
+        if (!this.config.analytics) {
+            return undefined;
+        }
+
+        const analyticsPath = this.config.analytics;
+        if (!(await fs.pathExists(analyticsPath))) {
+            console.warn(`Analytics configuration file not found: ${analyticsPath}`);
+            return undefined;
+        }
+
+        try {
+            // Clear require cache to ensure fresh load
+            delete require.cache[require.resolve(path.resolve(analyticsPath))];
+
+            // Import the analytics configuration
+            const analyticsModule = require(path.resolve(analyticsPath));
+
+            // Support both default export and named exports
+            const analyticsConfig =
+                analyticsModule.default || analyticsModule.analytics || analyticsModule;
+
+            if (typeof analyticsConfig === 'function') {
+                // If it's a function, call it to get the config
+                return analyticsConfig();
+            } else if (typeof analyticsConfig === 'object' && analyticsConfig !== null) {
+                // If it's an object, use it directly
+                return analyticsConfig;
+            } else {
+                console.warn(
+                    `Invalid analytics configuration in ${analyticsPath}. Expected function or object.`,
+                );
+                return undefined;
+            }
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.error(
+                `Failed to load analytics configuration from ${analyticsPath}: ${errorMessage}`,
+            );
+            return undefined;
+        }
     }
 
     /**
@@ -208,12 +270,14 @@ export class PageBuilder {
      * @param yamlFile - Path to the YAML file
      * @param componentManifest - Array of component manifests
      * @param generatedCSSFiles - Array of generated CSS file paths
+     * @param analyticsConfig - Analytics configuration
      * @returns Promise that resolves when page is built
      */
     private async buildPage(
         yamlFile: string,
         componentManifest: ComponentManifest[],
         generatedCSSFiles: string[] = [],
+        analyticsConfig?: AnalyticsContextProps,
     ): Promise<void> {
         // Read and parse YAML
         const yamlContent = await fs.readFile(yamlFile, 'utf-8');
@@ -239,6 +303,7 @@ export class PageBuilder {
             componentManifest,
             generatedCSSFiles,
             outputName,
+            analyticsConfig,
         );
 
         // Write the HTML file

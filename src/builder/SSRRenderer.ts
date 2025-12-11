@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import {BuilderConfig, NavigationData, PageConfig} from '../types';
+import {AnalyticsContextProps, BuilderConfig, NavigationData, PageConfig} from '../types';
 
 export class SSRRenderer {
     private config: BuilderConfig;
@@ -35,12 +35,14 @@ export class SSRRenderer {
      * @param pageConfig - Page configuration object
      * @param navigation - Navigation data object
      * @param filename - Filename for debug logging
+     * @param analyticsConfig - Analytics configuration
      * @returns Promise that resolves to rendered HTML string
      */
     async renderToHTML(
         pageConfig: PageConfig,
         navigation: NavigationData | undefined,
         filename?: string,
+        analyticsConfig?: AnalyticsContextProps,
     ): Promise<string> {
         if (!this.serverModule) {
             throw new Error('Server bundle not loaded. Call loadServerBundle() first.');
@@ -52,6 +54,7 @@ export class SSRRenderer {
                 pageConfig,
                 this.config.theme || 'light',
                 navigation,
+                analyticsConfig,
             );
 
             console.log(`✓ SSR rendered page: ${filename || pageConfig.meta?.title || 'Untitled'}`);

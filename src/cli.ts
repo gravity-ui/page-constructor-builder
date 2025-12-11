@@ -22,6 +22,7 @@ program
     .option('--css <files...>', 'Custom CSS files to include')
     .option('--components <path>', 'Custom components directory')
     .option('--navigation <path>', 'Navigation file path')
+    .option('--analytics <path>', 'Analytics configuration file path')
     .option('--theme <theme>', 'Theme (light|dark)', 'light')
     .option('--base-url <url>', 'Base URL for the site')
     .option('--minify', 'Enable minification')
@@ -91,6 +92,7 @@ async function loadConfig(options: any): Promise<BuilderConfig> {
         webpack: config.webpack,
         navigation: options.navigation || config.navigation,
         favicon: options.favicon || config.favicon,
+        analytics: options.analytics || config.analytics,
     };
 
     return finalConfig;

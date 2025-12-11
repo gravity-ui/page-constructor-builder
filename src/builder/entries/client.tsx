@@ -18,10 +18,11 @@ export interface ClientRenderOptions {
     customComponents?: Record<string, React.ComponentType<any>>;
     theme?: string;
     navigation?: NavigationData;
+    analytics?: any;
 }
 
 export function hydratePageConstructor(options: ClientRenderOptions): void {
-    const {pageConfig, customComponents = {}, theme = 'light', navigation} = options;
+    const {pageConfig, customComponents = {}, theme = 'light', navigation, analytics} = options;
 
     const pageElement = React.createElement(
         ThemeProvider,
@@ -34,6 +35,7 @@ export function hydratePageConstructor(options: ClientRenderOptions): void {
                     navigator.userAgent,
                 ),
                 ssrConfig: {isServer: false},
+                analytics: analytics,
             },
             React.createElement(PageConstructor, {
                 content: pageConfig,

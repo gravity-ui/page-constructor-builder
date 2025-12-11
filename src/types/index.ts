@@ -27,6 +27,8 @@ export interface BuilderConfig {
     navigation?: string;
     /** Favicon configuration */
     favicon?: string;
+    /** Analytics configuration file path */
+    analytics?: string;
 }
 
 export interface PageMetaSharing {
@@ -85,4 +87,9 @@ export interface ComponentManifest {
 }
 
 // Re-export types for convenience
-export type {NavigationData, PageContent} from '@gravity-ui/page-constructor';
+export type {
+    NavigationData,
+    PageContent,
+    AnalyticsEvent,
+    AnalyticsContextProps,
+} from '@gravity-ui/page-constructor';
