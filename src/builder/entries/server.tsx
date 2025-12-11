@@ -18,10 +18,11 @@ export interface ServerRenderOptions {
     customComponents?: Record<string, React.ComponentType<any>>;
     theme?: string;
     navigation?: NavigationData;
+    analytics?: any;
 }
 
 export function renderPageToString(options: ServerRenderOptions): string {
-    const {pageConfig, customComponents = {}, theme = 'light', navigation} = options;
+    const {pageConfig, customComponents = {}, theme = 'light', navigation, analytics} = options;
 
     const pageElement = React.createElement(
         ThemeProvider,
@@ -32,6 +33,7 @@ export function renderPageToString(options: ServerRenderOptions): string {
                 theme: theme as any,
                 isMobile: false, // Default to desktop for SSR
                 ssrConfig: {isServer: true},
+                analytics: analytics,
             },
             React.createElement(PageConstructor, {
                 content: pageConfig,

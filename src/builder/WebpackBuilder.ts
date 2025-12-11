@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import {BuilderConfig, ComponentManifest} from '../types';
+import {AnalyticsContextProps, BuilderConfig, ComponentManifest} from '../types';
 
 export class WebpackBuilder {
     private config: BuilderConfig;
@@ -16,12 +16,16 @@ export class WebpackBuilder {
     /**
      * Build both client and server bundles
      * @param componentManifest - Array of component manifests
+     * @param analyticsConfig - Analytics configuration
      * @returns Promise that resolves when build is complete
      */
-    async build(componentManifest: ComponentManifest[]): Promise<void> {
+    async build(
+        componentManifest: ComponentManifest[],
+        analyticsConfig?: AnalyticsContextProps,
+    ): Promise<void> {
         // Create temporary entry files for both client and server
-        const clientEntryPath = await this.createClientEntry(componentManifest);
-        const serverEntryPath = await this.createServerEntry(componentManifest);
+        const clientEntryPath = await this.createClientEntry(componentManifest, analyticsConfig);
+        const serverEntryPath = await this.createServerEntry(componentManifest, analyticsConfig);
 
         try {
             // Build client bundle
@@ -67,7 +71,10 @@ export class WebpackBuilder {
      * @param componentManifest - Array of component manifests
      * @returns Promise that resolves to the entry file path
      */
-    private async createClientEntry(componentManifest: ComponentManifest[]): Promise<string> {
+    private async createClientEntry(
+        componentManifest: ComponentManifest[],
+        analyticsConfig?: AnalyticsContextProps,
+    ): Promise<string> {
         const entryPath = path.join(this.getPackageRoot(), 'temp-client-entry.tsx');
 
         const entryContent = `
@@ -109,19 +116,23 @@ const customComponents = {
 ${componentManifest.map((comp) => `  '${comp.name}': ${comp.name}`).join(',\n')}
 };
 
+// Analytics configuration
+const analyticsConfig = ${analyticsConfig ? this.generateAnalyticsCode(analyticsConfig) : 'undefined'};
+
 // Make hydratePageConstructor available globally with custom components
 declare global {
     interface Window {
-        hydratePageConstructor: (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any}) => void;
+        hydratePageConstructor: (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any, analytics?: any}) => void;
     }
 }
 
-window.hydratePageConstructor = (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any}) => {
+window.hydratePageConstructor = (options: {pageConfig: any, customComponents?: any, theme?: string, navigation?: any, analytics?: any}) => {
     hydratePageConstructor({
         pageConfig: options.pageConfig,
         customComponents: options.customComponents || customComponents,
         theme: options.theme,
         navigation: options.navigation,
+        analytics: options.analytics || analyticsConfig,
     });
 };
 
@@ -135,9 +146,13 @@ console.log('✓ Client bundle loaded with custom components:', Object.keys(cust
     /**
      * Create server entry file that includes all components and styles
      * @param componentManifest - Array of component manifests
+     * @param analyticsConfig - Analytics configuration
      * @returns Promise that resolves to the entry file path
      */
-    private async createServerEntry(componentManifest: ComponentManifest[]): Promise<string> {
+    private async createServerEntry(
+        componentManifest: ComponentManifest[],
+        analyticsConfig?: AnalyticsContextProps,
+    ): Promise<string> {
         const entryPath = path.join(this.getPackageRoot(), 'temp-server-entry.tsx');
 
         const entryContent = `
@@ -157,13 +172,17 @@ const customComponents = {
 ${componentManifest.map((comp) => `  '${comp.name}': ${comp.name}`).join(',\n')}
 };
 
+// Analytics configuration
+const analyticsConfig = ${analyticsConfig ? this.generateAnalyticsCode(analyticsConfig) : 'undefined'};
+
 // Export render function with custom components
-export function renderPage(pageConfig: any, theme?: string, navigation?: any): string {
+export function renderPage(pageConfig: any, theme?: string, navigation?: any, analytics?: any): string {
     return renderPageToString({
         pageConfig,
         customComponents,
         theme,
         navigation,
+        analytics: analytics || analyticsConfig,
     });
 }
 
@@ -172,6 +191,25 @@ export default renderPage;
 
         await fs.writeFile(entryPath, entryContent);
         return entryPath;
+    }
+
+    /**
+     * Generate analytics configuration code that preserves functions
+     * @param analyticsConfig - Analytics configuration object
+     * @returns String representation of analytics config with functions
+     */
+    private generateAnalyticsCode(analyticsConfig: AnalyticsContextProps): string {
+        const parts: string[] = [];
+
+        if (analyticsConfig.sendEvents) {
+            parts.push(`sendEvents: ${analyticsConfig.sendEvents.toString()}`);
+        }
+
+        if (analyticsConfig.autoEvents !== undefined) {
+            parts.push(`autoEvents: ${analyticsConfig.autoEvents}`);
+        }
+
+        return `{ ${parts.join(', ')} }`;
     }
 
     /**

@@ -1,4 +1,10 @@
-import {BuilderConfig, ComponentManifest, NavigationData, PageConfig} from '../types';
+import {
+    AnalyticsContextProps,
+    BuilderConfig,
+    ComponentManifest,
+    NavigationData,
+    PageConfig,
+} from '../types';
 import {SSRRenderer} from './SSRRenderer';
 
 // Import server utilities for content transformation
@@ -20,6 +26,7 @@ export class TemplateRenderer {
      * @param componentManifest - Array of component manifests
      * @param generatedCSSFiles - Array of generated CSS file paths
      * @param filename - Filename for debug logging
+     * @param analyticsConfig - Analytics configuration
      * @returns Promise that resolves to HTML string
      */
     async render(
@@ -28,6 +35,7 @@ export class TemplateRenderer {
         _componentManifest: ComponentManifest[] = [],
         generatedCSSFiles: string[] = [],
         filename?: string,
+        analyticsConfig?: AnalyticsContextProps,
     ): Promise<string> {
         // Load the server bundle (includes all components)
         await this.ssrRenderer.loadServerBundle();
@@ -40,6 +48,7 @@ export class TemplateRenderer {
             transformedPageConfig,
             navigation,
             filename,
+            analyticsConfig,
         );
 
         // Generate HTML with pre-rendered content and client hydration
@@ -48,6 +57,7 @@ export class TemplateRenderer {
             navigation,
             prerenderedContent,
             generatedCSSFiles,
+            analyticsConfig,
         );
         return html;
     }
@@ -58,6 +68,7 @@ export class TemplateRenderer {
      * @param navigation - Navigation data object
      * @param prerenderedContent - Pre-rendered HTML content from SSR
      * @param generatedCSSFiles - Array of generated CSS file paths
+     * @param analyticsConfig - Analytics configuration
      * @returns Complete HTML string
      */
     private generateHTML(
@@ -65,6 +76,7 @@ export class TemplateRenderer {
         navigation: NavigationData | undefined,
         prerenderedContent?: string,
         generatedCSSFiles: string[] = [],
+        analyticsConfig?: AnalyticsContextProps,
     ): string {
         const title = this.escapeHtml(pageConfig.meta?.title || 'Page Constructor Builder');
         const description = this.escapeHtml(pageConfig.meta?.description || '');
@@ -193,7 +205,8 @@ export class TemplateRenderer {
                     window.hydratePageConstructor({
                         pageConfig: pageConfig,
                         theme: '${theme}',
-                        navigation: ${JSON.stringify(navigation, null, 2)}
+                        navigation: ${JSON.stringify(navigation, null, 2)},
+                        analytics: ${this.generateAnalyticsCode(analyticsConfig)}
                     });
                 } catch (error) {
                     console.error('Error initializing Page Constructor:', error);
@@ -350,6 +363,29 @@ export class TemplateRenderer {
         }
 
         return tags.join('\n    ');
+    }
+
+    /**
+     * Generate analytics configuration code that preserves functions
+     * @param analyticsConfig - Analytics configuration object
+     * @returns String representation of analytics config with functions
+     */
+    private generateAnalyticsCode(analyticsConfig?: AnalyticsContextProps): string {
+        if (!analyticsConfig) {
+            return 'undefined';
+        }
+
+        const parts: string[] = [];
+
+        if (analyticsConfig.sendEvents) {
+            parts.push(`sendEvents: ${analyticsConfig.sendEvents.toString()}`);
+        }
+
+        if (analyticsConfig.autoEvents !== undefined) {
+            parts.push(`autoEvents: ${analyticsConfig.autoEvents}`);
+        }
+
+        return `{ ${parts.join(', ')} }`;
     }
 
     /**
