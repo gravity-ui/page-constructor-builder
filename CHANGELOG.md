@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/gravity-ui/page-constructor-builder/compare/v1.2.0...v1.3.0) (2025-12-11)
+
+
+### Features
+
+* add analytics ([6f82b86](https://github.com/gravity-ui/page-constructor-builder/commit/6f82b86430c0ff405c9e72cf4085a5fd94dab7f2))
+
 ## [1.2.0](https://github.com/gravity-ui/page-constructor-builder/compare/v1.1.0...v1.2.0) (2025-08-21)
 
 
